@@ -1,0 +1,2 @@
+ADBC Driver for Exasol (Build Scripts)
+Copyright 2026 ADBC Drivers Contributors

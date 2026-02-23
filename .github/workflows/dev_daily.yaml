@@ -1,0 +1,92 @@
+# Copyright (c) 2025-2026 ADBC Drivers Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This is a common workflow synchronizing workflows in driver repositories.
+
+name: Dev (Daily)
+
+on:
+  schedule:
+    - cron: 14 23 * * *
+
+concurrency:
+  group: ${{ github.repository }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  sync_workflows:
+    name: Sync Workflows
+    runs-on: ubuntu-slim
+    if: github.repository_owner == 'adbc-drivers'
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          fetch-depth: 1
+          persist-credentials: true # for git operations below
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b  # v7.3.0
+
+      - name: Re-generate workflows
+        run: |
+          echo "Generating workflows with adbc-gen-workflow..."
+          uvx --from git+https://github.com/adbc-drivers/dev.git adbc-gen-workflow generate $(pwd) || {
+            echo "ERROR: Failed to generate workflows"
+            exit 1
+          }
+
+          echo "Workflow generation completed successfully"
+
+      - name: Create PR if there are any changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            PR_TITLE="chore: update generated workflows"
+            BRANCH="chore/workflows_$(date +%Y-%m-%d)"
+
+            # Skip if branch already exists on remote
+            if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
+              echo "Branch $BRANCH already exists on remote. Skipping creating a new PR."
+              exit 0
+            fi
+
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -b "$BRANCH"
+            # Only add workflow files
+            git add .github/workflows/
+            git commit -m "update generated workflows"
+            git push origin "$BRANCH"
+
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "$PR_TITLE" \
+              --body "" || {
+                echo "ERROR: Failed to create pull request"
+                exit 1
+              }
+          else
+            echo "No changes to commit. Skipping creating a PR."
+          fi
