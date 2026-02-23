@@ -1,11 +1,10 @@
-#:schema https://raw.githubusercontent.com/adbc-drivers/dev/refs/heads/main/schema/generate-schema.json
 # Copyright (c) 2026 ADBC Drivers Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#         http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-driver = "exasol"
+# bzip2-rs leaks symbols
+# https://github.com/trifectatechfoundation/bzip2-rs/issues/81
 
-[lang.script.build]
-additional-make-args = ["TOOLCHAIN=rust"]
-lang-tools = ["rust"]
+[target.x86_64-unknown-linux-gnu]
+linker = "./intercept-version-script.sh"
+
+[target.aarch64-unknown-linux-gnu]
+linker = "./intercept-version-script.sh"
