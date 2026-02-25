@@ -12,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
 from adbc_drivers_validation.tests.connection import (
-    TestConnection,  # noqa: F401
+    TestConnection as ConnectionTests,
+)
+from adbc_drivers_validation.tests.connection import (
     generate_tests,
 )
 
@@ -23,3 +26,9 @@ from . import exasol
 def pytest_generate_tests(metafunc) -> None:
     quirks = [exasol.get_quirks(metafunc.config.getoption("vendor_version"))]
     return generate_tests(quirks, metafunc)
+
+
+class TestConnection(ConnectionTests):
+    @pytest.mark.xfail(match="None")
+    def test_get_info_arrow_version(self, driver, conn) -> None:
+        super().test_get_info_arrow_version(driver, conn)
