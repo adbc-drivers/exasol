@@ -14,4 +14,4 @@
 
 [submodule "src/exarrow-rs"]
 	path = src/exarrow-rs
-	url = http://github.com/exasol-labs/exarrow-rs
+	url = https://github.com/lidavidm/exarrow-rs

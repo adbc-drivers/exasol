@@ -28,6 +28,12 @@ main() {
         linux)
             prefix="lib"
             ext="so"
+
+            # bzip2-rs leaks symbols
+            # https://github.com/trifectatechfoundation/bzip2-rs/issues/81
+            mkdir -p "$(pwd)/exarrow-rs/.cargo/"
+            cp ./cargo-config.toml "$(pwd)/exarrow-rs/.cargo/config.toml"
+            cp ./intercept-version-script.sh "$(pwd)/exarrow-rs/"
             ;;
         macos)
             prefix="lib"

@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import adbc_driver_manager.dbapi
-import pytest
-
-
-def test_package() -> None:
-    # Invalid URI, just ensure the driver itself loads
-    uri = "exasol://foo:bar@localhost:8080"
-    with pytest.raises(adbc_driver_manager.dbapi.Error, match="Failed to connect"):
-        with adbc_driver_manager.dbapi.connect(
-            driver="exasol", uri=uri, autocommit=True
-        ) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT 1")
+services:
+  test-service:
+    image: exasol/docker-db:2025.2.0
+    healthcheck:
+      # The CLI is very particular about certificate verification, and the needed fingerprint isn't stable, so check health a different way.
+      test: bash -c "/opt/exasol/db-2025.2.0/bin/Console/exaplus -u sys -p exasol -encryption ON -c localhost:8563 -sql \"SELECT 1;\" 2>&1 | grep fingerprint"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    ports:
+      - 8563:8563
+    privileged: true

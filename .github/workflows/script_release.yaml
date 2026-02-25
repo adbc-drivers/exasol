@@ -192,7 +192,7 @@ jobs:
             source .env.test
           fi
           set +a
-          pixi run adbc-make build DEBUG=true VERBOSE=true DRIVER=exasol IMPL_LANG=script
+          pixi run adbc-make build DEBUG=true VERBOSE=true DRIVER=exasol IMPL_LANG=script TOOLCHAIN=rust
 
       - name: Start Test Dependencies
         # Can't use Docker on macOS AArch64 runners, and Windows containers
@@ -313,7 +313,7 @@ jobs:
             source .env.release
           fi
           set +a
-          pixi run adbc-make check CI=true VERBOSE=true DRIVER=exasol IMPL_LANG=script
+          pixi run adbc-make check CI=true VERBOSE=true DRIVER=exasol IMPL_LANG=script TOOLCHAIN=rust
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f  # v6.0.0
         with:
