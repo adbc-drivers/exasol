@@ -54,14 +54,34 @@ def driver_path(driver: adbc_drivers_validation.model.DriverQuirks) -> str:
     )
 
 
+_conn_factory = conn_factory
+
+
+@pytest.fixture(scope="session")
+def conn_factory(
+    request,
+    _conn_factory,  # noqa:F811
+) -> typing.Callable[[], adbc_driver_manager.dbapi.Connection]:
+    def _factory():
+        c = _conn_factory()
+        c.adbc_current_db_schema = "ADBC_TEST"
+        with c.cursor() as cursor:
+            cursor.adbc_statement.set_sql_query("OPEN SCHEMA ADBC_TEST")
+            cursor.adbc_statement.execute_update()
+        return c
+
+    return _factory
+
+
 @pytest.fixture(scope="session", autouse=True)
 def _setup_resources(
     driver: adbc_drivers_validation.model.DriverQuirks,
-    conn_factory: typing.Callable[[], adbc_driver_manager.dbapi.Connection],  # noqa: F811
+    _conn_factory: typing.Callable[[], adbc_driver_manager.dbapi.Connection],  # noqa: F811
 ) -> None:
-    with conn_factory() as conn:  # noqa:F811
+    with _conn_factory() as conn:  # noqa:F811
         with conn.cursor() as cursor:
             statements = [
+                f"CREATE SCHEMA IF NOT EXISTS {driver.features.current_schema}",
                 # f"CREATE SCHEMA {driver.features.secondary_schema}",
                 # f"CREATE DATABASE {driver.features.secondary_catalog}",
                 # f"USE {driver.features.secondary_catalog}",
@@ -72,9 +92,7 @@ def _setup_resources(
                 try:
                     cursor.adbc_statement.set_sql_query(statement)
                     cursor.adbc_statement.execute_update()
-                except adbc_driver_manager.dbapi.ProgrammingError as e:
-                    if "There is already an object named" in str(
-                        e
-                    ) or "already exists" in str(e):
+                except adbc_driver_manager.dbapi.Error as e:
+                    if "already exists" in str(e):
                         continue
                     raise RuntimeError(statement) from e

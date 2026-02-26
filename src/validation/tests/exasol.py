@@ -13,22 +13,24 @@
 # limitations under the License.
 
 import functools
-import re
 from pathlib import Path
 
-from adbc_drivers_validation import model
+from adbc_drivers_validation import model, quirks
 
 
 class Exasol2025Quirks(model.DriverQuirks):
     name = "exasol"
     driver = "adbc_driver_exasol"
-    driver_name = ""
+    driver_name = "exarrow-rs"
     vendor_name = "Exasol"
-    vendor_version = re.compile(
-        r"16\.0\.\d+\.\d+ Enterprise Evaluation Edition \(64-bit\)"
-    )
+    vendor_version = ""
     short_version = "2025"
-    features = model.DriverFeatures()
+    features = model.DriverFeatures(
+        statement_prepare=True,
+        statement_rows_affected=True,
+        statement_rows_affected_ddl=True,
+        current_schema="ADBC_TEST",
+    )
     setup = model.DriverSetup(
         database={
             "uri": model.FromEnv("EXASOL_URI"),
@@ -47,11 +49,8 @@ class Exasol2025Quirks(model.DriverQuirks):
     def is_table_not_found(self, table_name: str, error: Exception) -> bool:
         raise error
 
-    # def split_statement(self, statement: str) -> list[str]:
-    #     # TODO(lidavidm): while MSSQL accepts multiple statements at once, it
-    #     # seems to be executed unreliably.  Are we waiting for multi-result
-    #     # queries properly?
-    #     return quirks.split_statement(statement)
+    def split_statement(self, statement: str) -> list[str]:
+        return quirks.split_statement(statement, dialect="exasol")
 
 
 @functools.cache
