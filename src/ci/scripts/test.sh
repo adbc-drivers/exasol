@@ -21,9 +21,8 @@ main() {
     local -r arch="${2}"
 
     pushd "$(pwd)/exarrow-rs"
-    # Ignore doctests; they seem to fail
     if [[ "${platform}" == "linux" ]]; then
-        cargo test --lib --bins --tests
+        cargo test
     else
         # We don't spawn the Docker container on other platforms
         cargo test --no-run
