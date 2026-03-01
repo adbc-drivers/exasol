@@ -16,9 +16,9 @@
 
 ## Where can I find the ADBC driver for Exasol?
 
-**The ADBC Driver for Exasol is maintained by Exasol Labs.**
+**The ADBC Driver for Exasol is community-supported as part of the [Exasol Labs 🧪](https://github.com/exasol-labs) initiative.**
 
-This repo is used by the [ADBC Driver Foundry](https://adbc-drivers.org) to build Exasol's ADBC driver and make it installable with [dbc](https://docs.columnar.tech/dbc).
+This repo is used by the [ADBC Driver Foundry](https://adbc-drivers.org) to build [Exasol's](https://exasol.com) ADBC driver and make it installable with [dbc](https://docs.columnar.tech/dbc).
 
 ---
 
