@@ -44,7 +44,7 @@ class Exasol2025Quirks(model.DriverQuirks):
         return (Path(__file__).parent.parent / "queries",)
 
     def bind_parameter(self, index: int) -> str:
-        return f"@p{index}"
+        return "?"
 
     def is_table_not_found(self, table_name: str, error: Exception) -> bool:
         raise error
