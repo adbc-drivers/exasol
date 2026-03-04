@@ -22,17 +22,17 @@
 
 This driver provides access to [Exasol][exasol], an in-memory analytics engine.  It is developed by Exasol Labs.  The source code can be found at [exarrow-rs](https://github.com/exasol-labs/exarrow-rs); the ADBC Driver Foundry distributes precompiled binaries of the upstream sources for Linux, macOS, and Windows.
 
+:::{note}
+This page provides some ADBC-specific documentation.  For full documentation and examples, see the upstream repository: https://github.com/exasol-labs/exarrow-rs.
+:::
+
 ## Installation
 
 The Exasol driver can be installed with [dbc](https://docs.columnar.tech/dbc):
 
 ```bash
-dbc install --pre exasol
+dbc install exasol
 ```
-
-:::{note}
-Only prerelease versions of the driver are currently available, so you must use `--pre` with dbc 0.2.0 or newer to install the driver.
-:::
 
 ## Connecting
 
@@ -49,7 +49,9 @@ conn = dbapi.connect(
 )
 ```
 
-Note: The example above is for Python using the [adbc-driver-manager](https://pypi.org/project/adbc-driver-manager) package but the process will be similar for other driver managers.
+Full documentation for the connection string format can be found at [exarrow-rs](https://github.com/exasol-labs/exarrow-rs/blob/main/docs/connection.md).
+
+Note: The example above is for Python using the [adbc-driver-manager](https://pypi.org/project/adbc-driver-manager) package but the process will be similar for other driver managers.  See [adbc-quickstarts](https://github.com/columnar-tech/adbc-quickstarts).
 
 ## Feature & Type Support
 
@@ -58,6 +60,12 @@ Note: The example above is for Python using the [adbc-driver-manager](https://py
 ### Types
 
 {{ types|safe }}
+
+## Previous Versions
+
+To see documentation for previous versions of this driver, see the following:
+
+- [v0.6.3](./v0.6.3.md)
 
 {{ footnotes|safe }}
 
