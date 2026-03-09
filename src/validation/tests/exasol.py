@@ -26,6 +26,9 @@ class Exasol2025Quirks(model.DriverQuirks):
     vendor_version = ""
     short_version = "2025"
     features = model.DriverFeatures(
+        connection_transactions=True,
+        get_objects=True,
+        statement_bind=True,
         statement_prepare=True,
         statement_rows_affected=True,
         statement_rows_affected_ddl=True,
