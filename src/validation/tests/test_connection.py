@@ -32,3 +32,7 @@ class TestConnection(ConnectionTests):
     @pytest.mark.xfail(match="None")
     def test_get_info_arrow_version(self, driver, conn) -> None:
         super().test_get_info_arrow_version(driver, conn)
+
+    @pytest.mark.xfail(match="Option not found")
+    def test_current_catalog(self, driver, conn) -> None:
+        super().test_current_catalog(driver, conn)
