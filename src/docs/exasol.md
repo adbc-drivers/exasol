@@ -65,6 +65,7 @@ Note: The example above is for Python using the [adbc-driver-manager](https://py
 
 To see documentation for previous versions of this driver, see the following:
 
+- [v0.7.0](./v0.7.0.md)
 - [v0.6.3](./v0.6.3.md)
 
 {{ footnotes|safe }}
