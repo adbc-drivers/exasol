@@ -29,7 +29,11 @@ if __name__ == "__main__":
 
     reports = [report.resolve() for report in Path(".").glob("validation-report*.xml")]
     generate_documentation.generate(
-        exasol.get_quirks,
+        "exasol",
+        lambda version, vendor: exasol.get_quirks(version),
+        [
+            ("exasol", "Exasol"),
+        ],
         reports,
         template,
         args.output.resolve(),
