@@ -69,12 +69,12 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
 
-      - uses: actions-rust-lang/setup-rust-toolchain@2b1f5e9b395427c92ee4e3331786ca3c37afe2d7  # v1.16.0
+      - uses: actions-rust-lang/setup-rust-toolchain@46268bd060767258de96ed93c1251119784f2ab6  # v1.16.1
         with:
           cache: false
           components: "clippy"
 
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false
@@ -164,12 +164,12 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
 
-      - uses: actions-rust-lang/setup-rust-toolchain@2b1f5e9b395427c92ee4e3331786ca3c37afe2d7  # v1.16.0
+      - uses: actions-rust-lang/setup-rust-toolchain@46268bd060767258de96ed93c1251119784f2ab6  # v1.16.1
         with:
           cache: false
           components: "clippy"
 
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false
@@ -260,7 +260,7 @@ jobs:
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
-          name: docs
+          name: docs-${{ matrix.vendor_version }}
           path: "src/generated/exasol.md"
           retention-days: 7
 
@@ -287,12 +287,12 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
 
-      - uses: actions-rust-lang/setup-rust-toolchain@2b1f5e9b395427c92ee4e3331786ca3c37afe2d7  # v1.16.0
+      - uses: actions-rust-lang/setup-rust-toolchain@46268bd060767258de96ed93c1251119784f2ab6  # v1.16.1
         with:
           cache: false
           components: "clippy"
 
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false
@@ -324,8 +324,7 @@ jobs:
             source .env.release
           fi
           set +a
-          pixi run adbc-make check CI=true VERBOSE=true DRIVER=exasol IMPL_LANG=script TOOLCHAIN=rust
-
+          pixi run adbc-make check CI=true VERBOSE=true DRIVER=exasol IMPL_LANG=script TOOLCHAIN=rust RELEASE=true
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
           name: drivers-${{ matrix.platform }}-${{ matrix.arch }}
@@ -348,12 +347,12 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
 
-      - uses: actions-rust-lang/setup-rust-toolchain@2b1f5e9b395427c92ee4e3331786ca3c37afe2d7  # v1.16.0
+      - uses: actions-rust-lang/setup-rust-toolchain@46268bd060767258de96ed93c1251119784f2ab6  # v1.16.1
         with:
           cache: false
           components: "clippy"
 
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false
@@ -377,7 +376,7 @@ jobs:
             --name exasol \
             --root $(pwd) \
             --manifest-template $(pwd)/manifest.toml \
-            ${{ (inputs.release && '--release') || '' }}\
+            --release \
             -o ~/packages \
             ~/drivers/drivers-*-*/
 
@@ -405,7 +404,7 @@ jobs:
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
-          name: docs-${{ matrix.vendor_version }}
+          name: docs
           path: "src/generated/exasol.md"
           retention-days: 2
 
@@ -427,7 +426,7 @@ jobs:
         with:
           cache: false
           go-version: 'stable'
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false
@@ -488,7 +487,7 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
 
-      - uses: prefix-dev/setup-pixi@1b2de7f3351f171c8b4dfeb558c639cb58ed4ec0  # v0.9.5
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11  # v0.9.6
         with:
           pixi-version: v0.63.2
           run-install: false

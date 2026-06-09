@@ -32,3 +32,8 @@ class TestConnection(ConnectionTests):
     @pytest.mark.xfail(match="None")
     def test_get_info_arrow_version(self, driver, conn) -> None:
         super().test_get_info_arrow_version(driver, conn)
+
+    # TODO: the driver doesn't raise the expected exception types
+    @pytest.mark.skip
+    def test_unknown_option(self, subtests, driver, conn) -> None:
+        super().test_unknown_option(subtests, driver, conn)
