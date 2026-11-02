@@ -19,9 +19,11 @@ import pytest
 def test_package() -> None:
     # Invalid URI, just ensure the driver itself loads
     uri = "exasol://foo:bar@localhost:8080"
-    with pytest.raises(adbc_driver_manager.dbapi.Error, match="Failed to connect"):
-        with adbc_driver_manager.dbapi.connect(
+    with (
+        pytest.raises(adbc_driver_manager.dbapi.Error, match="Failed to connect"),
+        adbc_driver_manager.dbapi.connect(
             driver="exasol", uri=uri, autocommit=True
-        ) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT 1")
+        ) as conn,
+        conn.cursor() as cursor,
+    ):
+        cursor.execute("SELECT 1")

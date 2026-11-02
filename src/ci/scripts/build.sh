@@ -38,12 +38,19 @@ main() {
         macos)
             prefix="lib"
             ext="dylib"
+
+            mkdir -p "$(pwd)/exarrow-rs/.cargo/"
+            cp ./cargo-config.toml "$(pwd)/exarrow-rs/.cargo/config.toml"
+            cp ./intercept-macos-linker.sh "$(pwd)/exarrow-rs/"
             ;;
         windows)
             prefix=""
             ext="dll"
             ;;
     esac
+
+    # Build bundled static bzip2 to avoid a system runtime dependency.
+    export BZIP2_NO_PKG_CONFIG=1
 
     pushd "$(pwd)/exarrow-rs"
     if [[ "${config}" == "release" ]]; then

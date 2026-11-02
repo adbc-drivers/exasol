@@ -16,7 +16,6 @@
 driver = "exasol"
 
 [lang.script.build]
-additional-make-args = ["TOOLCHAIN=rust"]
 lang-tools = ["rust"]
 
 [[lang.script.validation.configs]]
