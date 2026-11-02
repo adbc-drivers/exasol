@@ -14,7 +14,7 @@
 
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: 45ef068da5f21267bb2a7ec4a623092959f09ce5  # frozen: v0.14.14
+  rev: 25bcf95026b96e2dd3c0aec3090c3d6ef6ca2e6c  # frozen: v0.17.3
   hooks:
   - id: ruff-check
     name: "ruff check"
@@ -22,7 +22,7 @@ repos:
   - id: ruff-format
 
 - repo: https://github.com/codespell-project/codespell
-  rev: 63c8f8312b7559622c0d82815639671ae42132ac  # v2.4.1
+  rev: 57b21406f092110c18776e39b0bda50d37c945c8  # frozen: v2.4.3
   hooks:
   - id: codespell
     exclude: >
@@ -52,7 +52,7 @@ repos:
   - id: shellcheck
 
 - repo: https://github.com/adbc-drivers/dev
-  rev: eb8f394c2c193cbb44ad1c348ccd036372b87394
+  rev: 0c94e3235eee46cc3ace6aa63daa203f3abcf53d  # frozen: v0.1.0
   hooks:
   - id: rat
 

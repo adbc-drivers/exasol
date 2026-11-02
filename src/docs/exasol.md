@@ -42,10 +42,10 @@ To use the driver, provide the URI of an Exasol database as the `uri` option.
 from adbc_driver_manager import dbapi
 
 conn = dbapi.connect(
-  driver="exasol",
-  db_kwargs={
-      "uri": "exasol://user:pass@localhost:8563/?tls=true&validateservercertificate=0",
-  }
+    driver="exasol",
+    db_kwargs={
+        "uri": "exasol://user:pass@localhost:8563/?tls=true&validateservercertificate=0",
+    },
 )
 ```
 

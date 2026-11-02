@@ -61,7 +61,7 @@ _conn_factory = conn_factory
 @pytest.fixture(scope="session")
 def conn_factory(
     request,
-    _conn_factory,  # noqa:F811
+    _conn_factory,
 ) -> typing.Callable[[], adbc_driver_manager.dbapi.Connection]:
     def _factory():
         c = _conn_factory()
@@ -77,23 +77,22 @@ def conn_factory(
 @pytest.fixture(scope="session", autouse=True)
 def _setup_resources(
     driver: adbc_drivers_validation.model.DriverQuirks,
-    _conn_factory: typing.Callable[[], adbc_driver_manager.dbapi.Connection],  # noqa: F811
+    _conn_factory: typing.Callable[[], adbc_driver_manager.dbapi.Connection],
 ) -> None:
-    with _conn_factory() as conn:  # noqa:F811
-        with conn.cursor() as cursor:
-            statements = [
-                f"CREATE SCHEMA IF NOT EXISTS {driver.features.current_schema}",
-                # f"CREATE SCHEMA {driver.features.secondary_schema}",
-                # f"CREATE DATABASE {driver.features.secondary_catalog}",
-                # f"USE {driver.features.secondary_catalog}",
-                # f"CREATE SCHEMA {driver.features.secondary_catalog_schema}",
-            ]
+    with _conn_factory() as conn, conn.cursor() as cursor:  # noqa:F811
+        statements = [
+            f"CREATE SCHEMA IF NOT EXISTS {driver.features.current_schema}",
+            # f"CREATE SCHEMA {driver.features.secondary_schema}",
+            # f"CREATE DATABASE {driver.features.secondary_catalog}",
+            # f"USE {driver.features.secondary_catalog}",
+            # f"CREATE SCHEMA {driver.features.secondary_catalog_schema}",
+        ]
 
-            for statement in statements:
-                try:
-                    cursor.adbc_statement.set_sql_query(statement)
-                    cursor.adbc_statement.execute_update()
-                except adbc_driver_manager.dbapi.Error as e:
-                    if "already exists" in str(e):
-                        continue
-                    raise RuntimeError(statement) from e
+        for statement in statements:
+            try:
+                cursor.adbc_statement.set_sql_query(statement)
+                cursor.adbc_statement.execute_update()
+            except adbc_driver_manager.dbapi.Error as e:
+                if "already exists" in str(e):
+                    continue
+                raise RuntimeError(statement) from e
